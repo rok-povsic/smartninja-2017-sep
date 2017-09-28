@@ -4,4 +4,11 @@
 
 {% block content %}
     <h1>DOMA</h1>
+
+    {% if user %}
+        Pozdravljen, {{ user.email() }}
+        <a href="{{ logout_url }}">Odjava</a>
+    {% else %}
+        <a href="{{ login_url }}">Prijava</a>
+    {% endif %}
 {% endblock %}
