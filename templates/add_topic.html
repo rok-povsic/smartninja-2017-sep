@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Add Topic{% endblock %}
+
+{% block content %}
+<h1>Add Topic</h1>
+
+    {% if user %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post">
+                <input type="hidden" name="csrf-token" value="{{ csrf_token }}">
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Text</label>
+                    <textarea name="text" class="form-control" rows="6" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    {% else %}
+        <a href="{{ login_url }}">Prijava</a>
+    {% endif %}
+{% endblock %}
