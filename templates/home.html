@@ -8,6 +8,20 @@
     {% if user %}
         Pozdravljen, {{ user.email() }}
         <a href="{{ logout_url }}">Odjava</a>
+
+        <table class="table table-bordered table-striped table-hover" style="margin: 1em">
+            <tr><th style="width: 30%">Created</th><th>Title</th></tr>
+
+        {% for topic in topics %}
+
+            <tr>
+                <td>{{ topic.created_at }}</td>
+                <td><a href="/">{{ topic.title }}</a></td>
+            </tr>
+
+        {% endfor %}
+
+        </table>
     {% else %}
         <a href="{{ login_url }}">Prijava</a>
     {% endif %}
