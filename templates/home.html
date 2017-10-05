@@ -16,7 +16,7 @@
 
             <tr>
                 <td>{{ topic.created_at }}</td>
-                <td><a href="/">{{ topic.title }}</a></td>
+                <td><a href="/topic-details/{{ topic.key.id() }}">{{ topic.title }}</a></td>
             </tr>
 
         {% endfor %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ topic.title }}{% endblock %}
+
+{% block content %}
+
+<div style="width: 70%; margin: 0 auto">
+    <h1>Topic details</h1>
+
+    <table class="table table-bordered table-striped" style="margin: 1em">
+        <tr><th style="width: 70%">{{ topic.title }}</th><th>{{ topic.created_at }}</th></tr>
+        <tr><td colspan="2">{{ topic.content}}</td></tr>
+    </table>
+
+    <div style="width: 70%; margin: 0 auto">
+        <table class="table table-bordered table-striped" style="margin: 1em">
+            <tr><th></th><th></th></tr>
+
+            {% for comment in comments %}
+                <tr><td>{{ comment.user_email }}</td><td>{{ comment.content}}</td></tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    {% if user %}
+
+    <h3>Add a comment</h3>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post">
+                <input type="hidden" name="csrf-token" value="{{ csrf_token }}">
+
+                <div class="form-group">
+                    <label>Text</label>
+                    <textarea name="text" class="form-control" rows="6" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    {% else %}
+    <a href="{{ login_url }}">Prijava</a>
+    {% endif %}
+
+</div>
+
+{% endblock %}
