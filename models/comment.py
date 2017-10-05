@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-from google.appengine.api import users
+from google.appengine.api import users, mail, taskqueue
 
 from models.topic import Topic
 
@@ -20,3 +20,11 @@ class Comment(ndb.Model):
         comment = Comment(content=text, user_email=email,
                           topic_id=int(topic_id), topic_title=topic.title)
         comment.put()
+
+        params = {
+            "email": topic.user_email,
+            "topic_title": topic.title,
+            "topic_id": topic.key.id()
+        }
+        taskqueue.add(url="/task/email-topic-author",
+                      params=params)
