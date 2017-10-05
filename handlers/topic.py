@@ -8,10 +8,12 @@ from handlers.base import BaseHandler
 from models.topic import Topic
 from models.comment import Comment
 
+
 def make_csrf_token():
     csrf_token = str(uuid.uuid4())
     memcache.add(csrf_token, True, time=600)
     return csrf_token
+
 
 class AddTopicHandler(BaseHandler):
     def get(self):
@@ -57,10 +59,6 @@ class TopicDetailsHandler(BaseHandler):
 
         text = cgi.escape(self.request.get('text'))
 
-        email = users.get_current_user().email()
+        Comment.create_comment(topic_id, text)
 
-        topic = Topic.get_by_id(int(topic_id))
-
-        comment = Comment(content=text, user_email=email, topic_id=int(topic_id), topic_title=topic.title)
-        comment.put()
         return self.redirect('/')
