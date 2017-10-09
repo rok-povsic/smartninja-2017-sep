@@ -62,3 +62,12 @@ class TopicDetailsHandler(BaseHandler):
         Comment.create_comment(topic_id, text)
 
         return self.redirect('/')
+
+
+class DeleteTopicHandler(BaseHandler):
+    def get(self, topic_id):
+        topic = Topic.get_by_id(int(topic_id))
+        topic.deleted = True
+        topic.put()
+
+        return self.redirect('/')

@@ -10,13 +10,18 @@
         <a href="{{ logout_url }}">Odjava</a>
 
         <table class="table table-bordered table-striped table-hover" style="margin: 1em">
-            <tr><th style="width: 30%">Created</th><th>Title</th></tr>
+            <tr>
+                <th style="width: 30%">Created</th>
+                <th>Title</th>
+                <th></th>
+            </tr>
 
         {% for topic in topics %}
 
             <tr>
                 <td>{{ topic.created_at }}</td>
                 <td><a href="/topic-details/{{ topic.key.id() }}">{{ topic.title }}</a></td>
+                <td><a href="/topic-delete/{{ topic.key.id() }}">Delete</a></td>
             </tr>
 
         {% endfor %}
