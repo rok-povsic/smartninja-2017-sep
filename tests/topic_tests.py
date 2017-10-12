@@ -4,14 +4,17 @@ import webapp2
 import webtest
 
 from google.appengine.ext import testbed
-from main import MainHandler
+from google.appengine.api import memcache
+
+from handlers.topic import AddTopicHandler
+from models.topic import Topic
 
 
-class MainPageTests(unittest.TestCase):
+class TopicTests(unittest.TestCase):
     def setUp(self):
         app = webapp2.WSGIApplication(
             [
-                webapp2.Route('/', MainHandler, name="main-page"),
+                webapp2.Route('/topic/add', AddTopicHandler),
             ])
 
         self.testapp = webtest.TestApp(app)
@@ -20,7 +23,7 @@ class MainPageTests(unittest.TestCase):
 
         """ Uncomment the stubs that you need to run tests. """
         self.testbed.init_datastore_v3_stub()
-        # self.testbed.init_memcache_stub()
+        self.testbed.init_memcache_stub()
         # self.testbed.init_mail_stub()
         # self.testbed.init_taskqueue_stub()
         self.testbed.init_user_stub()
@@ -33,11 +36,18 @@ class MainPageTests(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def test_main_page_handler(self):
-        response = self.testapp.get('/')  # get main handler
-        self.assertEqual(response.status_int, 200)  # if GET request was ok, it should return 200 status code
+    def test_add_topic_handler(self):
+        memcache.add(key='abc123', value=True)
 
-    def test_main_contains_proper_text(self):
-        response = self.testapp.get('/')
-        self.assertIn("DOMA", response.body)
-        self.assertNotIn("123", response.body)
+        params = {
+            'title': 'Nova tema',
+            'text': 'Neka vsebina teme.',
+            'csrf-token': 'abc123'
+        }
+        response = self.testapp.post('/topic/add',
+                                     params)
+        self.assertEquals(
+            response.status_int, 302)
+
+        topic = Topic.query().get()
+        self.assertEqual('Nova tema', topic.title)
