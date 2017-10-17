@@ -30,4 +30,25 @@
     {% else %}
         <a href="{{ login_url }}">Prijava</a>
     {% endif %}
+
+    <div id="stock-price"></div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $("h1").mouseover(function () {
+                $("h1").css("font-weight", "bold");
+            });
+            $("h1").mouseout(function () {
+               $("h1").css("font-weight", "normal");
+            });
+
+            setInterval(function() {
+                $.get("/stock", function(response) {
+                    $("#stock-price").html(response);
+                });
+            }, 500);
+        });
+    </script>
 {% endblock %}
